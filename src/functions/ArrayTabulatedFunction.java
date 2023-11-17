@@ -1,5 +1,7 @@
 package functions;
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Objects;
 
 public class ArrayTabulatedFunction implements TabulatedFunction, Serializable{
 
@@ -172,5 +174,45 @@ public class ArrayTabulatedFunction implements TabulatedFunction, Serializable{
             System.out.print(array[i].getY());
             System.out.println();
         }
+    }
+
+    public String toString(){
+        String strings = "{ ";
+        for(int i = 0; i<length; i++){
+            strings+= array[i].toString() + " ";
+        }
+        strings+= "}";
+        return strings;
+    }
+
+    public boolean equals(Object obj){
+        if(this == obj) return true;
+        if(!(obj instanceof TabulatedFunction)) return false;
+        if(obj instanceof ArrayTabulatedFunction){
+            ArrayTabulatedFunction aObj = (ArrayTabulatedFunction) obj;
+            if(this.length != aObj.length) return false;
+            for(int i = 0; i<length; i++){
+                if(!array[i].equals(aObj.array[i])) return false;
+            }
+        }
+        else{
+            if(((TabulatedFunction) obj).getPointsCount() != length) return false;
+            for(int i = 0; i<length; i++){
+                if(!(((TabulatedFunction) obj).getPoint(i)).equals(array[i])) return false;
+            }
+        }
+        return true;
+    }
+
+    public int hashCode(){
+        int result = Objects.hashCode(length);
+        result = 31 * result + Arrays.hashCode(array);
+        return result;
+    }
+
+    public Object clone() throws CloneNotSupportedException{
+        FunctionPoint[] newArray = new FunctionPoint[length];
+        System.arraycopy(array, 0, newArray, 0, length);
+        return new ArrayTabulatedFunction(newArray);
     }
 }

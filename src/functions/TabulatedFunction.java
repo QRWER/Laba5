@@ -20,4 +20,5 @@ public interface TabulatedFunction extends Function{
 
     void addPoint(FunctionPoint point) throws InappropriateFunctionPointException;
 
+    Object clone() throws CloneNotSupportedException;
 }

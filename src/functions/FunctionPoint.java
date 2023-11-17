@@ -1,5 +1,6 @@
 package functions;
 import java.io.Serializable;
+import java.util.Objects;
 
 public class FunctionPoint implements Serializable {
     private double x;
@@ -29,5 +30,21 @@ public class FunctionPoint implements Serializable {
     }
     public void setY(double y){
         this.y = y;
+    }
+
+    public String toString(){
+        return "(" + x + ";" + y + ")";
+    }
+
+    public boolean equals(Object obj){
+        return (obj instanceof FunctionPoint) && (this.x == ((FunctionPoint) obj).x) && (this.y == ((FunctionPoint) obj).getY());
+    }
+
+    public int hashCode(){
+        return Objects.hash(x, y);
+    }
+
+    public Object clone() throws CloneNotSupportedException{
+        return super.clone();
     }
 }

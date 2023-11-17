@@ -1,5 +1,7 @@
 package functions;
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Objects;
 
 public class LinkedListTabulatedFunction implements TabulatedFunction, Serializable{
 
@@ -25,6 +27,7 @@ public class LinkedListTabulatedFunction implements TabulatedFunction, Serializa
             this.next = node.next;
             this.prev = node.prev;
         }
+
     }
 
     private FunctionNode head;
@@ -220,5 +223,59 @@ public class LinkedListTabulatedFunction implements TabulatedFunction, Serializa
         head.prev = secondNode;
         firstNode.next = secondNode;
         firstNode.prev = secondNode;
+    }
+
+    public String toString(){
+        String strings = "{ ";
+        FunctionNode tmp = head.next;
+        for(int i = 0; i<countOfNodes; i++){
+            strings+= tmp.data.toString() + " ";
+            tmp = tmp.next;
+        }
+        strings+= "}";
+        return strings;
+    }
+
+    public boolean equals(Object obj){
+        if(this == obj) return true;
+        if (!(obj instanceof TabulatedFunction)) return false;
+        if (obj instanceof LinkedListTabulatedFunction) {
+            LinkedListTabulatedFunction aObj = (LinkedListTabulatedFunction) obj;
+            if(aObj.countOfNodes != this.countOfNodes) return false;
+            FunctionNode thisTmp = this.head.next;
+            FunctionNode objTmp = aObj.head.next;
+            for(int i = 0; i<countOfNodes; i++){
+                if(!thisTmp.data.equals(objTmp.data)) return false;
+                thisTmp = thisTmp.next;
+                objTmp = objTmp.next;
+            }
+        }
+        else{
+            if(((TabulatedFunction) obj).getPointsCount() != countOfNodes) return false;
+            FunctionNode thisTmp = this.head.next;
+            for(int i = 0; i<countOfNodes; i++){
+                if(!((TabulatedFunction) obj).getPoint(i).equals(thisTmp.data)) return false;
+                thisTmp = thisTmp.next;
+            }
+        }
+        return true;
+    }
+
+    public int hashCode(){
+        int result = Objects.hashCode(countOfNodes);
+        FunctionNode tmp = head.next;
+        for(int i = 0; i<countOfNodes; i++){
+            result = 31 * result + Objects.hash(tmp.data);
+            tmp=tmp.next;
+        }
+        return result;
+    }
+
+    public Object clone()throws CloneNotSupportedException{
+        FunctionPoint[] newNodes = new FunctionPoint[countOfNodes];
+        for(int i = 0; i<countOfNodes; i++){
+            newNodes[i] = new FunctionPoint(this.getPoint(i));
+        }
+        return new LinkedListTabulatedFunction(newNodes);
     }
 }
